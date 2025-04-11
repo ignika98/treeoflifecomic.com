@@ -95,13 +95,19 @@ document.addEventListener("DOMContentLoaded", () => {
       chapterTitle.textContent = chapter.title;
       chapterLink.appendChild(chapterTitle);
 
-      chapterLink.addEventListener("click", (e) => {
+      // Append the chapter link to the grid
+      chaptersGrid.appendChild(chapterLink);
+    });
+
+    // After all chapters are added, attach event listeners to the newly created chapter links
+    document.querySelectorAll(".chapter-link").forEach(link => {
+      link.addEventListener("click", (e) => {
         e.preventDefault();
-        loadChapter(chapter.id, chapter.pageCount);
+        const chapterId = link.getAttribute("data-chapter-id");
+        const pageCount = parseInt(link.getAttribute("data-page-count"));
+        loadChapter(chapterId, pageCount);
         showPage("chapter-page");
       });
-
-      chaptersGrid.appendChild(chapterLink);
     });
   }
 
@@ -109,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     comicPages = [];
     currentPage = 0;
     for (let i = 1; i <= pageCount; i++) {
-      comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.png`);
+      comicPages.push(`https://treeoflifex.s3.us-east-2.amazonaws.com/${chapterId}/page${i}.png`);
     }
     renderPages();
     loadDisqus(chapterId);
