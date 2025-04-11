@@ -1,26 +1,36 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelectorAll(".navbar a");
   const pages = document.querySelectorAll(".page");
 
   function showPage(pageId) {
     pages.forEach(page => page.classList.add("hidden"));
-    const activePage = document.getElementById(pageId);
-    if (activePage) activePage.classList.remove("hidden");
-  }
-
-  function handleNavigation(event) {
-    event.preventDefault(); // Prevent default link behavior (automatic scrolling)
-    const pageId = event.target.getAttribute("data-page");
-    if (pageId) {
-      showPage(pageId);
-      window.location.hash = pageId; // Update the URL hash
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+      targetPage.classList.remove("hidden");
     }
   }
 
-  navLinks.forEach(link => link.addEventListener("click", handleNavigation));
+  function handleNavigation(event) {
+    event.preventDefault(); // Stop scrolling
+    const pageId = event.currentTarget.getAttribute("data-page");
+    if (pageId) {
+      history.pushState(null, "", `#${pageId}`);
+      showPage(pageId);
+    }
+  }
 
-  const initialPage = window.location.hash.replace("#", "") || "home";
-  showPage(initialPage);
+  navLinks.forEach(link => {
+    link.addEventListener("click", handleNavigation);
+  });
+
+  function initPageFromHash() {
+    const pageId = window.location.hash.replace("#", "") || "home";
+    showPage(pageId);
+  }
+
+  window.addEventListener("popstate", initPageFromHash);
+  initPageFromHash();
 
   // === Chapter Viewer Logic ===
   const chapterViewer = document.getElementById("latest-chapter");
@@ -68,11 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadChapter(chapterId) {
-    // Example: chapter1 -> [page1.jpg, page2.jpg, etc.]
     comicPages = [];
     currentPage = 0;
     for (let i = 1; i <= 10; i++) {
-      comicPages.push(`https://treeoflifex.s3.us-east-2.amazonaws.com/${chapterId}/page${i}.png`);
+      comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.jpg`);
     }
     renderPages();
     loadDisqus(chapterId);
@@ -106,139 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-let chapterData = [];
-
-let chapterData = [];
-
-function renderChapterList() {
-  const container = document.getElementById("chapters-list");
-  container.innerHTML = "";
-
-  chapterData.forEach(chapter => {
-    const item = document.createElement("div");
-    item.className = "chapter-item";
-
-    item.innerHTML = `
-      <a href="#" class="chapter-link" data-chapter-id="${chapter.id}">
-        <div class="chapter-title">${chapter.title}</div>
-        <img src="${chapter.cover}" alt="${chapter.title}">
-      </a>
-    `;
-
-    container.appendChild(item);
-  });
-
-  document.querySelectorAll(".chapter-link").forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const chapterId = link.getAttribute("data-chapter-id");
-      if (chapterId) {
-        loadChapter(chapterId);
-        showPage("chapters");
-        window.scrollTo({ top: 0, behavior: "instant" });
-      }
-    });
-  });
-}
-
-fetch("chapters.json")
-  .then(response => response.json())
-  .then(data => {
-    chapterData = data;
-    renderChapterList();
-
-    // Load the latest chapter on homepage
-    const latest = chapterData[chapterData.length - 1];
-    if (latest) {
-      loadChapter(latest.id);
-    }
-  })
-  .catch(error => {
-    console.error("Failed to load chapters.json", error);
-  });
-
-
-  const container = document.getElementById("chapters-list");
-  container.innerHTML = "";
-
-  chapterData.forEach(chapter => {
-    const item = document.createElement("div");
-    item.className = "chapter-item";
-
-    item.innerHTML = `
-      <a href="#" class="chapter-link" data-chapter-id="${chapter.id}">
-        <div class="chapter-title">${chapter.title}</div>
-        <img src="${chapter.cover}" alt="${chapter.title}">
-      </a>
-    `;
-
-    container.appendChild(item);
-  });
-
-  // Add event listeners to newly created links
-  document.querySelectorAll(".chapter-link").forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const chapterId = link.getAttribute("data-chapter-id");
-      if (chapterId) {
-        loadChapter(chapterId);
-        showPage("chapters"); // or "chapter-page" depending on your layout
-        window.scrollTo({ top: 0, behavior: "instant" });
-      }
-    });
-  });
-}
-
-renderChapterList();
-
-  const container = document.getElementById("chapters-list");
-  container.innerHTML = "";
-
-  chapterData.forEach(chapter => {
-    const item = document.createElement("div");
-    item.className = "chapter-item";
-
-    item.innerHTML = `
-      <a href="#" class="chapter-link" data-chapter-id="${chapter.id}">
-        <div class="chapter-title">${chapter.title}</div>
-        <img src="${chapter.cover}" alt="${chapter.title}">
-      </a>
-    `;
-
-    container.appendChild(item);
-  });
-
-  document.querySelectorAll(".chapter-link").forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const chapterId = link.getAttribute("data-chapter-id");
-      if (chapterId) {
-        loadChapter(chapterId);
-        showPage("chapters");
-        window.scrollTo({ top: 0, behavior: "instant" });
-      }
-    });
-  });
-}
-
-fetch("chapters.json")
-  .then(response => response.json())
-  .then(data => {
-    chapterData = data;
-    renderChapterList();
-
-    // Load the latest chapter on homepage
-    const latest = chapterData[chapterData.length - 1];
-    if (latest) {
-      loadChapter(latest.id);
-    }
-  })
-  .catch(error => {
-    console.error("Failed to load chapters.json", error);
-  });
-
-
-  // Example trigger for chapter links
   document.querySelectorAll(".chapter-link").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
@@ -250,33 +126,38 @@ fetch("chapters.json")
     });
   });
 
-  // Load homepage default chapter
- loadChapter(chapterData[chapterData.length - 1].id);
+  // Dynamically detect most recent chapter (example assumes chapters named chapter1, chapter2, ...)
+  const mostRecentChapter = "chapter" + Math.max(...Array.from(document.querySelectorAll(".chapter-link"))
+    .map(link => parseInt(link.getAttribute("data-chapter-id").replace("chapter", "")))
+    .filter(num => !isNaN(num)));
 
+  loadChapter(mostRecentChapter);
 
   // === Search Feature ===
   const searchInput = document.getElementById("search-input");
   const searchButton = document.getElementById("search-button");
   const searchFilter = document.getElementById("search-filter");
 
-  searchButton.addEventListener("click", () => {
-    const query = searchInput.value.toLowerCase();
-    const filter = searchFilter.value;
+  if (searchButton) {
+    searchButton.addEventListener("click", () => {
+      const query = searchInput.value.toLowerCase();
+      const filter = searchFilter.value;
 
-    if (!query) return;
+      if (!query) return;
 
-    if (filter === "all" || filter === "chapters") {
-      document.querySelectorAll(".chapters-grid .chapter-item").forEach(item => {
-        const title = item.querySelector(".chapter-title").textContent.toLowerCase();
-        item.style.display = title.includes(query) ? "block" : "none";
-      });
-    }
+      if (filter === "all" || filter === "chapters") {
+        document.querySelectorAll(".chapters-grid .chapter-item").forEach(item => {
+          const title = item.querySelector(".chapter-title").textContent.toLowerCase();
+          item.style.display = title.includes(query) ? "block" : "none";
+        });
+      }
 
-    if (filter === "all" || filter === "blog") {
-      document.querySelectorAll("#blog-posts .blog-post").forEach(post => {
-        const content = post.textContent.toLowerCase();
-        post.style.display = content.includes(query) ? "block" : "none";
-      });
-    }
-  });
+      if (filter === "all" || filter === "blog") {
+        document.querySelectorAll("#blog-posts .blog-post").forEach(post => {
+          const content = post.textContent.toLowerCase();
+          post.style.display = content.includes(query) ? "block" : "none";
+        });
+      }
+    });
+  }
 });
