@@ -1,0 +1,167 @@
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-image: url('images/bg-loop.png');
+  background-repeat: repeat-y;
+  background-position: left, right;
+  background-size: auto 100%;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+header {
+  background-color: #fff;
+  padding: 20px;
+  border-bottom: 2px solid #ccc;
+  text-align: center;
+}
+
+.logo {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.navbar a:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+main {
+  flex: 1;
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+
+.page.hidden {
+  display: none;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 2em;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+}
+
+.chapter-item {
+  text-align: center;
+}
+
+.chapter-title {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.comic-viewer.landscape {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.comic-viewer.portrait {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.comic-viewer img {
+  max-width: 100%;
+  height: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border-radius: 5px;
+}
+
+.sort-controls {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.sort-controls button {
+  padding: 8px 12px;
+  margin-left: 10px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sort-controls button:hover {
+  background-color: #bbb;
+}
+
+#blog-posts .blog-post {
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+footer {
+  background-color: #fff;
+  text-align: center;
+  padding: 20px;
+  border-top: 2px solid #ccc;
+}
+
+.search-box {
+  margin-bottom: 10px;
+}
+
+.search-box input,
+.search-box select {
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-box button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-box button:hover {
+  background-color: #222;
+}
