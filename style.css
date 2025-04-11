@@ -114,12 +114,19 @@ h1 {
 .chapters-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
+  gap: 15px;
+  justify-content: center;
 }
 
-.chapter-item {
-  text-align: center;
+
+.chapter-item img {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
 
 .chapter-title {
   margin-top: 10px;
