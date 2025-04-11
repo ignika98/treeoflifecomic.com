@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     comicPages = [];
     currentPage = 0;
     for (let i = 1; i <= pageCount; i++) {
-      comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.jpg`);
+      comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.png`);
     }
     renderPages();
     loadDisqus(chapterId);
