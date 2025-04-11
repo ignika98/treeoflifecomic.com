@@ -1,322 +1,199 @@
-/* Reset and base styles */
-* {
-  box-sizing: border-box;
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-}
-
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-image: url('images/bg-loop.png');
-  background-repeat: repeat-y;
-  background-position: left, right;
-  background-size: 100px 100%;
-  padding-left: 100px;
-  padding-right: 100px;
+  box-sizing: border-box;
 }
 
 header {
-  background-color: #fff;
-  padding: 20px;
-  border-bottom: 2px solid #ccc;
-  text-align: center;
+  background-color: #333;
+  color: white;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.logo {
-  font-size: 2.5em;
-  font-weight: bold;
-  margin-bottom: 10px;
+header .logo {
+  display: flex;
+  justify-content: center;
+}
+
+header .logo img {
+  height: 40px;
 }
 
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
+  margin-top: 10px;
 }
 
 .nav-links {
   display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
   gap: 20px;
 }
 
-.navbar a {
+.nav-links a {
+  color: white;
   text-decoration: none;
-  color: #444;
-  font-weight: 500;
-  padding: 10px 15px;
-  border-radius: 5px;
-  transition: background 0.3s, color 0.3s;
+  padding: 10px;
+  transition: background-color 0.3s;
 }
 
-.navbar a:hover {
-  background-color: #444;
-  color: #fff;
+.nav-links a:hover {
+  background-color: #555;
+  border-radius: 5px;
 }
 
 .search-box {
+  margin-left: 20px;
   display: flex;
   align-items: center;
 }
 
-.search-box input,
-.search-box select {
-  padding: 8px;
+.search-box input {
+  padding: 5px;
   margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+}
+
+.search-box select {
+  padding: 5px;
+  margin-right: 10px;
 }
 
 .search-box button {
-  padding: 8px 12px;
+  padding: 5px 10px;
+  background-color: #555;
+  color: white;
   border: none;
-  background-color: #444;
-  color: #fff;
-  border-radius: 5px;
   cursor: pointer;
 }
 
 .search-box button:hover {
-  background-color: #222;
+  background-color: #444;
 }
 
-main {
-  flex: 1;
-  max-width: 1600px;
-  margin: auto;
-  padding: 30px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-radius: 10px;
+/* Page Layout */
+.page {
+  display: none;
 }
 
 .page.hidden {
   display: none;
 }
 
-h1 {
-  margin-bottom: 20px;
-  font-size: 2em;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 10px;
+main {
+  padding: 20px;
 }
 
+h1 {
+  font-size: 2em;
+}
+
+/* Chapters Page */
 .chapters-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 15px;
-  justify-content: center;
-}
-  
-@media (max-width: 1600px) {
-  .chapters-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
+  margin-top: 20px;
 }
 
-@media (max-width: 1280px) {
-  .chapters-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+.chapter-link {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease-in-out;
 }
 
-@media (max-width: 1024px) {
-  .chapters-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.chapter-link:hover {
+  transform: scale(1.05);
 }
 
-@media (max-width: 768px) {
-  .chapters-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .chapters-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-}
-
-
-.chapter-item img {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.chapter-link img {
   width: 100%;
-  max-width: 150px;
   height: auto;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  
+  border-radius: 10px;
 }
 
-
-.chapter-title {
+.chapter-link p {
   margin-top: 10px;
-  font-weight: bold;
+  font-size: 1.2em;
 }
 
-.comic-viewer.landscape {
+/* Comic Viewer */
+.comic-viewer {
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 10px;
 }
 
 .comic-viewer.portrait {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
 }
 
 .comic-viewer img {
   max-width: 100%;
-  height: auto;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  border-radius: 5px;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 10px;
 }
 
-.sort-controls {
-  margin-bottom: 20px;
-  text-align: right;
-}
-
-.sort-controls button {
-  padding: 8px 12px;
-  margin-left: 10px;
-  border: none;
-  background-color: #ddd;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.sort-controls button:hover {
-  background-color: #bbb;
-}
-
-#blog-posts .blog-post {
-  margin-bottom: 30px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-footer {
-  background-color: #fff;
-  text-align: center;
+#latest-chapter {
+  display: flex;
+  justify-content: center;
   padding: 20px;
-  border-top: 2px solid #ccc;
 }
 
-/* Responsive design for smaller screens */
-@media (max-width: 1024px) {
-  body {
-    padding-left: 50px;
-    padding-right: 50px;
-  }
+#disqus_thread {
+  margin-top: 20px;
+}
 
+/* Responsive Styles */
+@media (max-width: 768px) {
   .navbar {
     flex-direction: column;
   }
 
   .nav-links {
     flex-direction: column;
-    gap: 15px;
-    align-items: center;
-  }
-
-  .search-box {
-    margin-top: 15px;
-  }
-
-  .chapters-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .comic-viewer.landscape {
-    flex-direction: column;
-  }
-
-  .sort-controls {
-    text-align: center;
-  }
-}
-
-@media (max-width: 768px) {
-  body {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .logo {
-    font-size: 1.8em;
-  }
-
-  .navbar a {
-    padding: 8px 12px;
-    font-size: 0.9em;
+    gap: 10px;
   }
 
   .chapters-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .search-box input,
-  .search-box select {
-    font-size: 0.9em;
+  .search-box {
+    margin-top: 20px;
   }
 
-  .comic-viewer img {
-    max-width: 90%;
-  }
-
-  .sort-controls button {
-    padding: 6px 10px;
+  .comic-viewer {
+    flex-direction: column;
   }
 }
 
 @media (max-width: 480px) {
-  body {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .logo {
-    font-size: 1.5em;
-  }
-
-  .navbar a {
-    padding: 6px 10px;
-    font-size: 0.8em;
-  }
-
-  .search-box input,
-  .search-box select {
-    font-size: 0.8em;
-    padding: 6px;
-  }
-
   .chapters-grid {
     grid-template-columns: 1fr;
   }
 
-  .comic-viewer img {
-    max-width: 100%;
+  .nav-links a {
+    padding: 8px;
   }
+}
 
-  .sort-controls {
-    text-align: left;
-  }
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }

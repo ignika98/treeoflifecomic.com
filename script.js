@@ -100,6 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // After all chapters are added, attach event listeners to the newly created chapter links
+    // Ensure event listeners are attached once all chapters are appended to the DOM
+    setUpChapterLinkEvents();
+  }
+
+  function setUpChapterLinkEvents() {
+    // Add event listeners for dynamically created chapter links
     document.querySelectorAll(".chapter-link").forEach(link => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
@@ -115,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     comicPages = [];
     currentPage = 0;
     for (let i = 1; i <= pageCount; i++) {
-      comicPages.push(`https://treeoflifex.s3.us-east-2.amazonaws.com/${chapterId}/page${i}.png`);
+      comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.jpg`);
     }
     renderPages();
     loadDisqus(chapterId);
