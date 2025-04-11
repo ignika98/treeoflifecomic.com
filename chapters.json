@@ -1,0 +1,27 @@
+[
+  {
+    "id": "chapter0",
+    "title": "Chapter 0: The Beginning And The End Of Everything",
+    "cover": "https://treeoflifex.s3.us-east-2.amazonaws.com/chapter0/page3.png"
+  },
+  {
+    "id": "chapter2",
+    "title": "Chapter 2: Rising Tension",
+    "cover": "https://your-s3-bucket.s3.amazonaws.com/chapter2/page1.jpg"
+  },
+  {
+    "id": "chapter3",
+    "title": "Chapter 3: The Reveal",
+    "cover": "https://your-s3-bucket.s3.amazonaws.com/chapter3/page1.jpg"
+  },
+  {
+    "id": "chapter4",
+    "title": "Chapter 4: Turning Point",
+    "cover": "https://your-s3-bucket.s3.amazonaws.com/chapter4/page1.jpg"
+  },
+  {
+    "id": "chapter5",
+    "title": "Chapter 5: A New Threat",
+    "cover": "https://your-s3-bucket.s3.amazonaws.com/chapter5/page1.jpg"
+  }
+]

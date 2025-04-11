@@ -48,7 +48,6 @@ header {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  z-index: 1;
 }
 
 .navbar a {
@@ -58,7 +57,6 @@ header {
   padding: 10px 15px;
   border-radius: 5px;
   transition: background 0.3s, color 0.3s;
-  z-index: 1;
 }
 
 .navbar a:hover {
@@ -177,4 +175,105 @@ footer {
   text-align: center;
   padding: 20px;
   border-top: 2px solid #ccc;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 1024px) {
+  body {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .navbar {
+    flex-direction: column;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .search-box {
+    margin-top: 15px;
+  }
+
+  .chapters-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .comic-viewer.landscape {
+    flex-direction: column;
+  }
+
+  .sort-controls {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .logo {
+    font-size: 1.8em;
+  }
+
+  .navbar a {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+
+  .chapters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .search-box input,
+  .search-box select {
+    font-size: 0.9em;
+  }
+
+  .comic-viewer img {
+    max-width: 90%;
+  }
+
+  .sort-controls button {
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .logo {
+    font-size: 1.5em;
+  }
+
+  .navbar a {
+    padding: 6px 10px;
+    font-size: 0.8em;
+  }
+
+  .search-box input,
+  .search-box select {
+    font-size: 0.8em;
+    padding: 6px;
+  }
+
+  .chapters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comic-viewer img {
+    max-width: 100%;
+  }
+
+  .sort-controls {
+    text-align: left;
+  }
 }

@@ -2,27 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelectorAll(".navbar a");
   const pages = document.querySelectorAll(".page");
 
-  // Function to show the appropriate page based on the pageId
   function showPage(pageId) {
     pages.forEach(page => page.classList.add("hidden"));
     const activePage = document.getElementById(pageId);
     if (activePage) activePage.classList.remove("hidden");
   }
 
-  // Handle navigation by setting the page's hash and displaying the right page
   function handleNavigation(event) {
-    event.preventDefault(); // Prevent default anchor behavior
-    const pageId = event.target.getAttribute("href").replace("#", "");
+    event.preventDefault(); // Prevent default link behavior (automatic scrolling)
+    const pageId = event.target.getAttribute("data-page");
     if (pageId) {
       showPage(pageId);
-      window.location.hash = pageId;
+      window.location.hash = pageId; // Update the URL hash
     }
   }
 
-  // Add event listeners to nav links
   navLinks.forEach(link => link.addEventListener("click", handleNavigation));
 
-  // Initial page load (based on the hash in the URL)
   const initialPage = window.location.hash.replace("#", "") || "home";
   showPage(initialPage);
 
@@ -76,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     comicPages = [];
     currentPage = 0;
     for (let i = 1; i <= 10; i++) {
-      comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.jpg`);
+      comicPages.push(`https://treeoflifex.s3.us-east-2.amazonaws.com/${chapterId}/page${i}.png`);
     }
     renderPages();
     loadDisqus(chapterId);
@@ -110,6 +106,56 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+let chapterData = [];
+
+function renderChapterList() {
+  const container = document.getElementById("chapters-list");
+  container.innerHTML = "";
+
+  chapterData.forEach(chapter => {
+    const item = document.createElement("div");
+    item.className = "chapter-item";
+
+    item.innerHTML = `
+      <a href="#" class="chapter-link" data-chapter-id="${chapter.id}">
+        <div class="chapter-title">${chapter.title}</div>
+        <img src="${chapter.cover}" alt="${chapter.title}">
+      </a>
+    `;
+
+    container.appendChild(item);
+  });
+
+  document.querySelectorAll(".chapter-link").forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const chapterId = link.getAttribute("data-chapter-id");
+      if (chapterId) {
+        loadChapter(chapterId);
+        showPage("chapters");
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+    });
+  });
+}
+
+fetch("chapters.json")
+  .then(response => response.json())
+  .then(data => {
+    chapterData = data;
+    renderChapterList();
+
+    // Load the latest chapter on homepage
+    const latest = chapterData[chapterData.length - 1];
+    if (latest) {
+      loadChapter(latest.id);
+    }
+  })
+  .catch(error => {
+    console.error("Failed to load chapters.json", error);
+  });
+
+
   // Example trigger for chapter links
   document.querySelectorAll(".chapter-link").forEach(link => {
     link.addEventListener("click", e => {
@@ -123,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Load homepage default chapter
-  loadChapter("chapter1");
+  loadChapter("chapter0");
 
   // === Search Feature ===
   const searchInput = document.getElementById("search-input");
