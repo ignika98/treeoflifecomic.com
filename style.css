@@ -117,14 +117,50 @@ h1 {
   gap: 15px;
   justify-content: center;
 }
+  
+@media (max-width: 1600px) {
+  .chapters-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1280px) {
+  .chapters-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .chapters-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .chapters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .chapters-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+}
 
 
 .chapter-item img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   max-width: 150px;
   height: auto;
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  
 }
 
 
