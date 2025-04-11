@@ -36,6 +36,14 @@ header {
 
 .navbar {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-links {
+  display: flex;
+  flex: 1;
   justify-content: center;
   gap: 20px;
 }
@@ -52,6 +60,32 @@ header {
 .navbar a:hover {
   background-color: #444;
   color: #fff;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+}
+
+.search-box input,
+.search-box select {
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-box button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-box button:hover {
+  background-color: #222;
 }
 
 main {
@@ -139,29 +173,4 @@ footer {
   text-align: center;
   padding: 20px;
   border-top: 2px solid #ccc;
-}
-
-.search-box {
-  margin-bottom: 10px;
-}
-
-.search-box input,
-.search-box select {
-  padding: 8px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.search-box button {
-  padding: 8px 12px;
-  border: none;
-  background-color: #444;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.search-box button:hover {
-  background-color: #222;
 }
