@@ -2,13 +2,13 @@
   {
     "id": "chapter0",
     "title": "Chapter 0",
-    "pageCount": 38,
+    "length": 38,
     "cover": "https://treeoflifex.s3.us-east-2.amazonaws.com/chapter0/page3.png"
   },
   {
     "id": "chapter2",
     "title": "Chapter 2",
-    "pageCount": 12,
+    "length": 12,
     "cover": "images/chapter2-cover.jpg"
   }
 ]
