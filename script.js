@@ -1,38 +1,37 @@
-document.addEventListener("DOMContentLoaded", () => {
+// === script.js ===
+
+// Wait for DOM
+document.addEventListener("DOMContentLoaded", async () => {
   const navLinks = document.querySelectorAll(".navbar a");
   const pages = document.querySelectorAll(".page");
-  const chapterViewer = document.getElementById("latest-chapter");
-  let comicPages = [];
-  let currentPage = 0;
-  let mode = window.innerWidth < 768 ? "portrait" : "landscape";
 
-  // Function to show the correct page
   function showPage(pageId) {
     pages.forEach(page => page.classList.add("hidden"));
     const activePage = document.getElementById(pageId);
     if (activePage) activePage.classList.remove("hidden");
   }
 
-  // Handle navigation bar clicks
   function handleNavigation(event) {
-    event.preventDefault();  // Prevent page jump
+    event.preventDefault();
     const pageId = event.target.getAttribute("data-page");
     if (pageId) {
       showPage(pageId);
-      window.location.hash = pageId;
+      history.pushState(null, null, `#${pageId}`);
     }
   }
 
-  // Add event listeners for each nav link
-  navLinks.forEach(link => {
-    link.addEventListener("click", handleNavigation);
-  });
+  navLinks.forEach(link => link.addEventListener("click", handleNavigation));
 
-  // Initial page load based on hash or default to "home"
   const initialPage = window.location.hash.replace("#", "") || "home";
   showPage(initialPage);
 
   // === Chapter Viewer Logic ===
+  const chapterViewer = document.getElementById("latest-chapter");
+  let comicPages = [];
+  let currentPage = 0;
+  let mode = window.innerWidth < 768 ? "portrait" : "landscape";
+  let chaptersData = [];
+
   function renderPages() {
     if (!chapterViewer || comicPages.length === 0) return;
     chapterViewer.innerHTML = "";
@@ -49,17 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         rightPage.src = comicPages[currentPage + 1];
       }
       container.appendChild(rightPage);
-    } else {
-      for (let i = currentPage; i < comicPages.length; i++) {
-        const page = document.createElement("img");
-        page.src = comicPages[i];
-        container.appendChild(page);
-      }
-    }
 
-    chapterViewer.appendChild(container);
-
-    if (mode === "landscape") {
       container.addEventListener("click", event => {
         const rect = container.getBoundingClientRect();
         if (event.clientX < rect.width / 2) {
@@ -69,22 +58,34 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         renderPages();
       });
+    } else {
+      for (let i = currentPage; i < comicPages.length; i++) {
+        const page = document.createElement("img");
+        page.src = comicPages[i];
+        container.appendChild(page);
+      }
     }
+
+    chapterViewer.appendChild(container);
   }
 
-  // Load chapter based on chapterId
-  function loadChapter(chapterId) {
+  async function loadChapter(chapterId) {
     comicPages = [];
-    currentPage = 1;
-    // Example: chapter1 -> [page1.jpg, page2.jpg, etc.]
-    for (let i = 1; i <= 100; i++) {  // This assumes chapters can have up to 100 pages.
+    currentPage = 0;
+
+    const response = await fetch("chapters.json");
+    const data = await response.json();
+    const chapter = data.chapters.find(ch => ch.id === chapterId);
+    const totalPages = chapter?.pages || 10;
+
+    for (let i = 1; i <= totalPages; i++) {
       comicPages.push(`https://treeoflifex.s3.us-east-2.amazonaws.com/${chapterId}/page${i}.png`);
     }
+
     renderPages();
     loadDisqus(chapterId);
   }
 
-  // Adjust rendering mode on resize
   window.addEventListener("resize", () => {
     const newMode = window.innerWidth < 768 ? "portrait" : "landscape";
     if (newMode !== mode) {
@@ -93,7 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Load Disqus comments
   function loadDisqus(identifier) {
     const disqusThread = document.getElementById("disqus_thread");
     if (!disqusThread) return;
@@ -114,44 +114,55 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Trigger chapter links to load specific chapters
   document.querySelectorAll(".chapter-link").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
       const chapterId = link.getAttribute("data-chapter-id");
       if (chapterId) {
         loadChapter(chapterId);
-        showPage("chapter-page");
+        showPage("home");
       }
     });
   });
 
-  // Example: Load the default chapter on the homepage
-  loadChapter("chapter1");
+  // Load most recent chapter from chapters.json
+  try {
+    const response = await fetch("chapters.json");
+    const data = await response.json();
+    chaptersData = data.chapters;
+    const latestChapter = chaptersData[chaptersData.length - 1];
+    if (latestChapter) {
+      loadChapter(latestChapter.id);
+    }
+  } catch (err) {
+    console.error("Error loading chapters.json:", err);
+  }
 
   // === Search Feature ===
   const searchInput = document.getElementById("search-input");
   const searchButton = document.getElementById("search-button");
   const searchFilter = document.getElementById("search-filter");
 
-  searchButton.addEventListener("click", () => {
-    const query = searchInput.value.toLowerCase();
-    const filter = searchFilter.value;
+  if (searchButton && searchInput && searchFilter) {
+    searchButton.addEventListener("click", () => {
+      const query = searchInput.value.toLowerCase();
+      const filter = searchFilter.value;
 
-    if (!query) return;
+      if (!query) return;
 
-    if (filter === "all" || filter === "chapters") {
-      document.querySelectorAll(".chapters-grid .chapter-item").forEach(item => {
-        const title = item.querySelector(".chapter-title").textContent.toLowerCase();
-        item.style.display = title.includes(query) ? "block" : "none";
-      });
-    }
+      if (filter === "all" || filter === "chapters") {
+        document.querySelectorAll(".chapters-grid .chapter-item").forEach(item => {
+          const title = item.querySelector(".chapter-title").textContent.toLowerCase();
+          item.style.display = title.includes(query) ? "block" : "none";
+        });
+      }
 
-    if (filter === "all" || filter === "blog") {
-      document.querySelectorAll("#blog-posts .blog-post").forEach(post => {
-        const content = post.textContent.toLowerCase();
-        post.style.display = content.includes(query) ? "block" : "none";
-      });
-    }
-  });
+      if (filter === "all" || filter === "blog") {
+        document.querySelectorAll("#blog-posts .blog-post").forEach(post => {
+          const content = post.textContent.toLowerCase();
+          post.style.display = content.includes(query) ? "block" : "none";
+        });
+      }
+    });
+  }
 });
