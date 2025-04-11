@@ -1,199 +1,177 @@
-/* General Styles */
-body {
-  font-family: Arial, sans-serif;
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-image: url('images/bg-loop.png');
+  background-repeat: repeat-y;
+  background-position: left, right;
+  background-size: 100px 100%;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
 header {
-  background-color: #333;
-  color: white;
-  padding: 10px 0;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  background-color: #fff;
+  padding: 20px;
+  border-bottom: 2px solid #ccc;
+  text-align: center;
 }
 
-header .logo {
-  display: flex;
-  justify-content: center;
-}
-
-header .logo img {
-  height: 40px;
+.logo {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .nav-links {
   display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
+  z-index: 1;
 }
 
-.nav-links a {
-  color: white;
+.navbar a {
   text-decoration: none;
-  padding: 10px;
-  transition: background-color 0.3s;
+  color: #444;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+  z-index: 1;
 }
 
-.nav-links a:hover {
-  background-color: #555;
-  border-radius: 5px;
+.navbar a:hover {
+  background-color: #444;
+  color: #fff;
 }
 
 .search-box {
-  margin-left: 20px;
   display: flex;
   align-items: center;
 }
 
-.search-box input {
-  padding: 5px;
-  margin-right: 10px;
-}
-
+.search-box input,
 .search-box select {
-  padding: 5px;
+  padding: 8px;
   margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .search-box button {
-  padding: 5px 10px;
-  background-color: #555;
-  color: white;
+  padding: 8px 12px;
   border: none;
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
   cursor: pointer;
 }
 
 .search-box button:hover {
-  background-color: #444;
+  background-color: #222;
 }
 
-/* Page Layout */
+main {
+  flex: 1;
+  max-width: 1600px;
+  margin: auto;
+  padding: 30px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+
 .page {
-  display: none;
+  display: block;
 }
 
 .page.hidden {
   display: none;
 }
 
-main {
-  padding: 20px;
-}
-
-h1 {
-  font-size: 2em;
-}
-
-/* Chapters Page */
 .chapters-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 15px;
-  margin-top: 20px;
+  gap: 20px;
 }
 
-.chapter-link {
-  display: block;
+.chapter-item {
   text-align: center;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.3s ease-in-out;
 }
 
-.chapter-link:hover {
-  transform: scale(1.05);
-}
-
-.chapter-link img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-}
-
-.chapter-link p {
+.chapter-title {
   margin-top: 10px;
-  font-size: 1.2em;
+  font-weight: bold;
 }
 
-/* Comic Viewer */
-.comic-viewer {
+.comic-viewer.landscape {
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 .comic-viewer.portrait {
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .comic-viewer img {
   max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-  border-radius: 10px;
+  height: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border-radius: 5px;
 }
 
-#latest-chapter {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
+.sort-controls {
+  margin-bottom: 20px;
+  text-align: right;
 }
 
-#disqus_thread {
-  margin-top: 20px;
+.sort-controls button {
+  padding: 8px 12px;
+  margin-left: 10px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-  }
-
-  .nav-links {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .chapters-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .search-box {
-    margin-top: 20px;
-  }
-
-  .comic-viewer {
-    flex-direction: column;
-  }
+.sort-controls button:hover {
+  background-color: #bbb;
 }
 
-@media (max-width: 480px) {
-  .chapters-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .nav-links a {
-    padding: 8px;
-  }
+#blog-posts .blog-post {
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
 }
 
 footer {
-  background-color: #333;
-  color: white;
+  background-color: #fff;
   text-align: center;
-  padding: 10px;
-  position: relative;
-  bottom: 0;
-  width: 100%;
+  padding: 20px;
+  border-top: 2px solid #ccc;
 }

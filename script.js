@@ -1,14 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelectorAll(".navbar a");
   const pages = document.querySelectorAll(".page");
+  const chapterViewer = document.getElementById("latest-chapter");
+  let comicPages = [];
+  let currentPage = 0;
+  let mode = window.innerWidth < 768 ? "portrait" : "landscape";
 
+  // Function to show the correct page
   function showPage(pageId) {
     pages.forEach(page => page.classList.add("hidden"));
     const activePage = document.getElementById(pageId);
     if (activePage) activePage.classList.remove("hidden");
   }
 
+  // Handle navigation bar clicks
   function handleNavigation(event) {
+    event.preventDefault();  // Prevent page jump
     const pageId = event.target.getAttribute("data-page");
     if (pageId) {
       showPage(pageId);
@@ -16,17 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  navLinks.forEach(link => link.addEventListener("click", handleNavigation));
+  // Add event listeners for each nav link
+  navLinks.forEach(link => {
+    link.addEventListener("click", handleNavigation);
+  });
 
+  // Initial page load based on hash or default to "home"
   const initialPage = window.location.hash.replace("#", "") || "home";
   showPage(initialPage);
 
   // === Chapter Viewer Logic ===
-  const chapterViewer = document.getElementById("latest-chapter");
-  let comicPages = [];
-  let currentPage = 0;
-  let mode = window.innerWidth < 768 ? "portrait" : "landscape";
-
   function renderPages() {
     if (!chapterViewer || comicPages.length === 0) return;
     chapterViewer.innerHTML = "";
@@ -66,67 +72,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Fetch chapter data from chapters.json
-  async function fetchChapters() {
-    try {
-      const response = await fetch("chapters.json");
-      const chapters = await response.json();
-      loadChaptersToPage(chapters);
-    } catch (error) {
-      console.error("Error fetching chapters data:", error);
-    }
-  }
-
-  // Load chapter details (including cover and page count) into the chapters grid
-  function loadChaptersToPage(chapters) {
-    const chaptersGrid = document.querySelector(".chapters-grid");
-    chapters.forEach(chapter => {
-      const chapterLink = document.createElement("a");
-      chapterLink.className = "chapter-link";
-      chapterLink.setAttribute("data-chapter-id", chapter.id);
-      chapterLink.setAttribute("data-page-count", chapter.pageCount);
-
-      const chapterCover = document.createElement("img");
-      chapterCover.src = chapter.cover;
-      chapterCover.alt = `${chapter.title} Cover`;
-      chapterLink.appendChild(chapterCover);
-
-      const chapterTitle = document.createElement("p");
-      chapterTitle.textContent = chapter.title;
-      chapterLink.appendChild(chapterTitle);
-
-      // Append the chapter link to the grid
-      chaptersGrid.appendChild(chapterLink);
-    });
-
-    // After all chapters are added, attach event listeners to the newly created chapter links
-    // Ensure event listeners are attached once all chapters are appended to the DOM
-    setUpChapterLinkEvents();
-  }
-
-  function setUpChapterLinkEvents() {
-    // Add event listeners for dynamically created chapter links
-    document.querySelectorAll(".chapter-link").forEach(link => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        const chapterId = link.getAttribute("data-chapter-id");
-        const pageCount = parseInt(link.getAttribute("data-page-count"));
-        loadChapter(chapterId, pageCount);
-        showPage("chapter-page");
-      });
-    });
-  }
-
-  function loadChapter(chapterId, pageCount) {
+  // Load chapter based on chapterId
+  function loadChapter(chapterId) {
     comicPages = [];
     currentPage = 0;
-    for (let i = 1; i <= pageCount; i++) {
+    // Example: chapter1 -> [page1.jpg, page2.jpg, etc.]
+    for (let i = 1; i <= 20; i++) {  // This assumes chapters can have up to 20 pages.
       comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.jpg`);
     }
     renderPages();
     loadDisqus(chapterId);
   }
 
+  // Adjust rendering mode on resize
   window.addEventListener("resize", () => {
     const newMode = window.innerWidth < 768 ? "portrait" : "landscape";
     if (newMode !== mode) {
@@ -135,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Load Disqus comments
   function loadDisqus(identifier) {
     const disqusThread = document.getElementById("disqus_thread");
     if (!disqusThread) return;
@@ -155,8 +114,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Load homepage default chapter
-  loadChapter("chapter1", 10);
+  // Trigger chapter links to load specific chapters
+  document.querySelectorAll(".chapter-link").forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const chapterId = link.getAttribute("data-chapter-id");
+      if (chapterId) {
+        loadChapter(chapterId);
+        showPage("chapter-page");
+      }
+    });
+  });
+
+  // Example: Load the default chapter on the homepage
+  loadChapter("chapter1");
 
   // === Search Feature ===
   const searchInput = document.getElementById("search-input");
@@ -183,7 +154,4 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
-
-  // Fetch and display chapters when page loads
-  fetchChapters();
 });
