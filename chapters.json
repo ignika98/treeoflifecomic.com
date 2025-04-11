@@ -2,9 +2,16 @@
   "chapters": [
     {
       "id": "chapter0",
-      "title": "Prologue",
+      "title": "Prologue: The Beginning of the End of Everything",
       "cover": "https://treeoflifex.s3.us-east-2.amazonaws.com/chapter0/page3.png",
       "pages": 38
+    }
+	
+	 {
+      "id": "chapter1",
+      "title": "Chapter 1: Keeper of Flocks",
+      "cover": "https://treeoflifex.s3.us-east-2.amazonaws.com/chapter1/page1.jpg",
+      "pages": 40
     }
   ]
 }
