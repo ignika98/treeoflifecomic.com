@@ -1,14 +1,28 @@
-[
-  {
-    "id": "chapter0",
-    "title": "Chapter 0",
-    "length": 38,
-    "cover": "https://treeoflifex.s3.us-east-2.amazonaws.com/chapter0/page3.png"
-  },
-  {
-    "id": "chapter2",
-    "title": "Chapter 2",
-    "length": 12,
-    "cover": "images/chapter2-cover.jpg"
-  }
-]
+{
+  "chapters": [
+    {
+      "id": "chapter0",
+      "title": "Prologue",
+      "cover": "https://treeoflifex.s3.us-east-2.amazonaws.com/chapter0/page3.png",
+      "pages": 38
+    },
+    {
+      "id": "chapter1",
+      "title": "The Beginning",
+      "cover": "images/chapters/chapter1/cover.jpg",
+      "pages": 12
+    },
+    {
+      "id": "chapter2",
+      "title": "A New Threat",
+      "cover": "images/chapters/chapter2/cover.jpg",
+      "pages": 14
+    },
+    {
+      "id": "chapter3",
+      "title": "Clash in the Shadows",
+      "cover": "images/chapters/chapter3/cover.jpg",
+      "pages": 10
+    }
+  ]
+}
