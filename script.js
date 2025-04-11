@@ -2,22 +2,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelectorAll(".navbar a");
   const pages = document.querySelectorAll(".page");
 
+  // Function to show the appropriate page based on the pageId
   function showPage(pageId) {
     pages.forEach(page => page.classList.add("hidden"));
     const activePage = document.getElementById(pageId);
     if (activePage) activePage.classList.remove("hidden");
   }
 
+  // Handle navigation by setting the page's hash and displaying the right page
   function handleNavigation(event) {
-    const pageId = event.target.getAttribute("data-page");
+    event.preventDefault(); // Prevent default anchor behavior
+    const pageId = event.target.getAttribute("href").replace("#", "");
     if (pageId) {
       showPage(pageId);
       window.location.hash = pageId;
     }
   }
 
+  // Add event listeners to nav links
   navLinks.forEach(link => link.addEventListener("click", handleNavigation));
 
+  // Initial page load (based on the hash in the URL)
   const initialPage = window.location.hash.replace("#", "") || "home";
   showPage(initialPage);
 
