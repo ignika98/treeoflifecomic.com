@@ -26,7 +26,7 @@ function showPage(pageId) {
 
 function loadChapter(chapterId, pageCount) {
   comicPages = [];
-  currentPage = 1;
+  currentPage = 0;
   for (let i = 1; i <= pageCount; i++) {
     comicPages.push(`https://treeoflifex.s3.us-east-2.amazonaws.com/${chapterId}/page${i}.png`);
   }
