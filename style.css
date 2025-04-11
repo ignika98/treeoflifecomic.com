@@ -16,9 +16,9 @@ body {
   background-image: url('images/bg-loop.png');
   background-repeat: repeat-y;
   background-position: left, right;
-  background-size: auto 100%;
-  padding-left: 40px;
-  padding-right: 40px;
+  background-size: 100px 100%;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
 header {
@@ -56,9 +56,9 @@ header {
 
 main {
   flex: 1;
-  max-width: 10000px;
+  max-width: 1600px;
   margin: auto;
-  padding: 20px;
+  padding: 30px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   border-radius: 10px;
