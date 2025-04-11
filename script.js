@@ -1,36 +1,25 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelectorAll(".navbar a");
   const pages = document.querySelectorAll(".page");
 
   function showPage(pageId) {
     pages.forEach(page => page.classList.add("hidden"));
-    const targetPage = document.getElementById(pageId);
-    if (targetPage) {
-      targetPage.classList.remove("hidden");
-    }
+    const activePage = document.getElementById(pageId);
+    if (activePage) activePage.classList.remove("hidden");
   }
 
   function handleNavigation(event) {
-    event.preventDefault(); // Stop scrolling
-    const pageId = event.currentTarget.getAttribute("data-page");
+    const pageId = event.target.getAttribute("data-page");
     if (pageId) {
-      history.pushState(null, "", `#${pageId}`);
       showPage(pageId);
+      window.location.hash = pageId;
     }
   }
 
-  navLinks.forEach(link => {
-    link.addEventListener("click", handleNavigation);
-  });
+  navLinks.forEach(link => link.addEventListener("click", handleNavigation));
 
-  function initPageFromHash() {
-    const pageId = window.location.hash.replace("#", "") || "home";
-    showPage(pageId);
-  }
-
-  window.addEventListener("popstate", initPageFromHash);
-  initPageFromHash();
+  const initialPage = window.location.hash.replace("#", "") || "home";
+  showPage(initialPage);
 
   // === Chapter Viewer Logic ===
   const chapterViewer = document.getElementById("latest-chapter");
@@ -77,11 +66,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function loadChapter(chapterId) {
+  // Fetch chapter data from chapters.json
+  async function fetchChapters() {
+    try {
+      const response = await fetch("chapters.json");
+      const chapters = await response.json();
+      loadChaptersToPage(chapters);
+    } catch (error) {
+      console.error("Error fetching chapters data:", error);
+    }
+  }
+
+  // Load chapter details (including cover and page count) into the chapters grid
+  function loadChaptersToPage(chapters) {
+    const chaptersGrid = document.querySelector(".chapters-grid");
+    chapters.forEach(chapter => {
+      const chapterLink = document.createElement("a");
+      chapterLink.className = "chapter-link";
+      chapterLink.setAttribute("data-chapter-id", chapter.id);
+      chapterLink.setAttribute("data-page-count", chapter.pageCount);
+
+      const chapterCover = document.createElement("img");
+      chapterCover.src = chapter.cover;
+      chapterCover.alt = `${chapter.title} Cover`;
+      chapterLink.appendChild(chapterCover);
+
+      const chapterTitle = document.createElement("p");
+      chapterTitle.textContent = chapter.title;
+      chapterLink.appendChild(chapterTitle);
+
+      chapterLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        loadChapter(chapter.id, chapter.pageCount);
+        showPage("chapter-page");
+      });
+
+      chaptersGrid.appendChild(chapterLink);
+    });
+  }
+
+  function loadChapter(chapterId, pageCount) {
     comicPages = [];
     currentPage = 0;
-    for (let i = 1; i <= 10; i++) {
-      comicPages.push(`https://treeoflifex.s3.us-east-2.amazonaws.com/${chapterId}/page${i}.png`);
+    for (let i = 1; i <= pageCount; i++) {
+      comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.jpg`);
     }
     renderPages();
     loadDisqus(chapterId);
@@ -115,49 +143,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  document.querySelectorAll(".chapter-link").forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const chapterId = link.getAttribute("data-chapter-id");
-      if (chapterId) {
-        loadChapter(chapterId);
-        showPage("chapter-page");
-      }
-    });
-  });
-
-  // Dynamically detect most recent chapter (example assumes chapters named chapter1, chapter2, ...)
-  const mostRecentChapter = "chapter" + Math.max(...Array.from(document.querySelectorAll(".chapter-link"))
-    .map(link => parseInt(link.getAttribute("data-chapter-id").replace("chapter", "")))
-    .filter(num => !isNaN(num)));
-
-  loadChapter(mostRecentChapter);
+  // Load homepage default chapter
+  loadChapter("chapter1", 10);
 
   // === Search Feature ===
   const searchInput = document.getElementById("search-input");
   const searchButton = document.getElementById("search-button");
   const searchFilter = document.getElementById("search-filter");
 
-  if (searchButton) {
-    searchButton.addEventListener("click", () => {
-      const query = searchInput.value.toLowerCase();
-      const filter = searchFilter.value;
+  searchButton.addEventListener("click", () => {
+    const query = searchInput.value.toLowerCase();
+    const filter = searchFilter.value;
 
-      if (!query) return;
+    if (!query) return;
 
-      if (filter === "all" || filter === "chapters") {
-        document.querySelectorAll(".chapters-grid .chapter-item").forEach(item => {
-          const title = item.querySelector(".chapter-title").textContent.toLowerCase();
-          item.style.display = title.includes(query) ? "block" : "none";
-        });
-      }
+    if (filter === "all" || filter === "chapters") {
+      document.querySelectorAll(".chapters-grid .chapter-item").forEach(item => {
+        const title = item.querySelector(".chapter-title").textContent.toLowerCase();
+        item.style.display = title.includes(query) ? "block" : "none";
+      });
+    }
 
-      if (filter === "all" || filter === "blog") {
-        document.querySelectorAll("#blog-posts .blog-post").forEach(post => {
-          const content = post.textContent.toLowerCase();
-          post.style.display = content.includes(query) ? "block" : "none";
-        });
-      }
-    });
-  }
+    if (filter === "all" || filter === "blog") {
+      document.querySelectorAll("#blog-posts .blog-post").forEach(post => {
+        const content = post.textContent.toLowerCase();
+        post.style.display = content.includes(query) ? "block" : "none";
+      });
+    }
+  });
+
+  // Fetch and display chapters when page loads
+  fetchChapters();
 });
