@@ -75,10 +75,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Load chapter based on chapterId
   function loadChapter(chapterId) {
     comicPages = [];
-    currentPage = 0;
+    currentPage = 1;
     // Example: chapter1 -> [page1.jpg, page2.jpg, etc.]
-    for (let i = 1; i <= 20; i++) {  // This assumes chapters can have up to 20 pages.
-      comicPages.push(`https://your-s3-bucket.s3.amazonaws.com/${chapterId}/page${i}.jpg`);
+    for (let i = 1; i <= 100; i++) {  // This assumes chapters can have up to 100 pages.
+      comicPages.push(`https://treeoflifex.s3.us-east-2.amazonaws.com/${chapterId}/page${i}.png`);
     }
     renderPages();
     loadDisqus(chapterId);
