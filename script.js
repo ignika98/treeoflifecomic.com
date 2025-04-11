@@ -126,6 +126,39 @@ function renderChapterList() {
     container.appendChild(item);
   });
 
+  // Add event listeners to newly created links
+  document.querySelectorAll(".chapter-link").forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const chapterId = link.getAttribute("data-chapter-id");
+      if (chapterId) {
+        loadChapter(chapterId);
+        showPage("chapters"); // or "chapter-page" depending on your layout
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+    });
+  });
+}
+
+renderChapterList();
+
+  const container = document.getElementById("chapters-list");
+  container.innerHTML = "";
+
+  chapterData.forEach(chapter => {
+    const item = document.createElement("div");
+    item.className = "chapter-item";
+
+    item.innerHTML = `
+      <a href="#" class="chapter-link" data-chapter-id="${chapter.id}">
+        <div class="chapter-title">${chapter.title}</div>
+        <img src="${chapter.cover}" alt="${chapter.title}">
+      </a>
+    `;
+
+    container.appendChild(item);
+  });
+
   document.querySelectorAll(".chapter-link").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
@@ -169,7 +202,8 @@ fetch("chapters.json")
   });
 
   // Load homepage default chapter
-  loadChapter("chapter0");
+ loadChapter(chapterData[chapterData.length - 1].id);
+
 
   // === Search Feature ===
   const searchInput = document.getElementById("search-input");
