@@ -17,8 +17,8 @@ body {
   background-repeat: repeat-y;
   background-position: left, right;
   background-size: auto 100%;
-  padding-left: 100px;
-  padding-right: 100px;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 header {
