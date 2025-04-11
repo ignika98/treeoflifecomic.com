@@ -108,7 +108,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
 let chapterData = [];
 
+let chapterData = [];
+
 function renderChapterList() {
+  const container = document.getElementById("chapters-list");
+  container.innerHTML = "";
+
+  chapterData.forEach(chapter => {
+    const item = document.createElement("div");
+    item.className = "chapter-item";
+
+    item.innerHTML = `
+      <a href="#" class="chapter-link" data-chapter-id="${chapter.id}">
+        <div class="chapter-title">${chapter.title}</div>
+        <img src="${chapter.cover}" alt="${chapter.title}">
+      </a>
+    `;
+
+    container.appendChild(item);
+  });
+
+  document.querySelectorAll(".chapter-link").forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const chapterId = link.getAttribute("data-chapter-id");
+      if (chapterId) {
+        loadChapter(chapterId);
+        showPage("chapters");
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+    });
+  });
+}
+
+fetch("chapters.json")
+  .then(response => response.json())
+  .then(data => {
+    chapterData = data;
+    renderChapterList();
+
+    // Load the latest chapter on homepage
+    const latest = chapterData[chapterData.length - 1];
+    if (latest) {
+      loadChapter(latest.id);
+    }
+  })
+  .catch(error => {
+    console.error("Failed to load chapters.json", error);
+  });
+
+
   const container = document.getElementById("chapters-list");
   container.innerHTML = "";
 
