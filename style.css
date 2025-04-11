@@ -37,7 +37,11 @@ body, html {
   box-sizing: border-box;
 }
 
-/* Landscape Mode: Pages side-by-side */
+/* Landscape Mode: Pages side-by-side (Right-to-Left) */
+.comic-viewer.landscape {
+  flex-direction: row-reverse;
+}
+
 .comic-viewer.landscape img {
   max-height: calc(100vh - 160px);
   max-width: 48vw;
